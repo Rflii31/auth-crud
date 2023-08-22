@@ -18,7 +18,7 @@ export default function DeleteProduct(product: Product) {
   async function handleDelete(productId: number) {
     setIsMutating(true);
 
-    await fetch(`http://localhost:3000/products/${productId}`, {
+    await fetch(`http://localhost:3001/products/${productId}`, {
       method: "DELETE",
     });
 

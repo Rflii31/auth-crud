@@ -16,7 +16,7 @@ export default function AddProduct() {
 
     setIsMutating(true);
 
-    await fetch("http://localhost:3000/products", {
+    await fetch("http://localhost:3001/products", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

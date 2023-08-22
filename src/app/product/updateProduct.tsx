@@ -22,7 +22,7 @@ export default function UpdateProduct(product: Product) {
 
     setIsMutating(true);
 
-    await fetch(`http://localhost:3000/products/${product.id}`, {
+    await fetch(`http://localhost:3001/products/${product.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

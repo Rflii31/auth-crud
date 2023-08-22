@@ -9,8 +9,8 @@ const Navbar = async () => {
     return (
         <div className="w-full px-4 py-8 bg-gray-300 flex flex-row items-center gap-4">
             <Link href="/">Home</Link>
-            {/* <Link href="/protected/dashboard">Dashboard</Link> */}
-            <Link href="/products">Dashboard</Link>
+            <Link href="/protected/dashboard">Dashboard</Link>
+            <Link href="/product">Products</Link>
 
             {session && session.user?.email ? (
                 <>
