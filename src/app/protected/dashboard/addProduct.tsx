@@ -1,98 +1,70 @@
-"use client";
-
-import { SyntheticEvent, useState } from "react";
+"use client"
+import { useState, SyntheticEvent } from "react";
+import { Brand } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
-export default function AddProduct() {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [modal, setModal] = useState(false);
-  const [isMutating, setIsMutating] = useState(false);
+const AddProduct = ({ brands }: { brands: Brand[] }) => {
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("");
+    const [brand, setBrand] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
 
-  const router = useRouter();
+    const router = useRouter();
 
-  async function handleSubmit(e: SyntheticEvent) {
-    e.preventDefault();
+    const handleSubmit = async (e: SyntheticEvent) => {
+        e.preventDefault();
+        await axios.post('/api/products', {
+            title: title,
+            price: Number(price),
+            brandId: Number(brand)
+        })
+        setTitle("");
+        setPrice("");
+        setBrand("");
+        router.refresh();
+        setIsOpen(false);
+    }
 
-    setIsMutating(true);
+    const handleModal = () => {
+        setIsOpen(!isOpen);
+    }
 
-    await fetch("http://localhost:3001/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        price: price,
-      }),
-    });
+    return (
+        <div>
+            <button className="btn btn-success" onClick={handleModal}>Add New</button>
 
-    setIsMutating(false);
+            <div className={isOpen ? 'modal modal-open' : 'modal'}>
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Add New Product</h3>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-control w-full">
+                            <label htmlFor="" className="label font-bold">Product Name</label>
+                            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="input input-bordered" placeholder="Product Name" />
+                        </div>
+                        <label htmlFor="" className="label font-bold">Price</label>
+                        <div className="form-control w-full">
+                            <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className="input input-bordered" placeholder="Price" />
+                        </div>
+                        <div className="form-control w-full">
+                            <label htmlFor="" className="label font-bold">Brand</label>
+                            <select value={brand} onChange={(e) => setBrand(e.target.value)} className="select select-bordered">
+                                <option value="" disabled>Select a Brand</option>
+                                {brands.map((brand) => (
+                                    <option value={brand.id} key={brand.id}>{brand.name}</option>
+                                ))}
 
-    setTitle("");
-    setPrice("");
-    router.refresh();
-    setModal(false);
-  }
-
-  function handleChange() {
-    setModal(!modal);
-  }
-
-  return (
-    <div>
-      <button className="btn" onClick={handleChange}>
-        Add New
-      </button>
-
-      <input
-        type="checkbox"
-        checked={modal}
-        onChange={handleChange}
-        className="modal-toggle"
-      />
-
-      <div className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Product</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-control">
-              <label className="label font-bold">Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input w-full input-bordered"
-                placeholder="Product Name"
-              />
+                            </select>
+                        </div>
+                        <div className="modal-action">
+                            <button type="button" className="btn" onClick={handleModal}>Close</button>
+                            <button type="submit" className="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div className="form-control">
-              <label className="label font-bold">Price</label>
-              <input
-                type="text"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="input w-full input-bordered"
-                placeholder="Price"
-              />
-            </div>
-            <div className="modal-action">
-              <button type="button" className="btn" onClick={handleChange}>
-                Close
-              </button>
-              {!isMutating ? (
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
-              ) : (
-                <button type="button" className="btn loading">
-                  Saving...
-                </button>
-              )}
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
-  );
+    )
 }
+
+export default AddProduct;

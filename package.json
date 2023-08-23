@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.0",
-    "@prisma/client": "^5.1.1",
+    "@prisma/client": "^5.2.0",
     "@prisma/migrate": "^5.1.1",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
@@ -37,6 +37,6 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^9.0.2",
     "json-server": "^0.17.3",
-    "prisma": "^5.1.1"
+    "prisma": "^5.2.0"
   }
 }
